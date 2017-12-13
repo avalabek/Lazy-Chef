@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
+  <title>Lazy Chef</title>
+</head>
+  
+<body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	
+
+
+  
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+     <br><br>
+      <h1 class="header center projectname">LazyChef</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
+      </div>
+      <div class="row center">
+      	<a class="btn-large waves-effect waves-light orange">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="formdisplay">
+  </div>
+
+  <div id="recipedisplay">
+  </div>
+
+
+  
+
+
+
+<script type="text/javascript">
+
+//Array that we will push ingredients into on click Submit Button 
+ingredients_array = ['strawberry', 'banana', 'apple'];
+
+//Combines ingredients with a ',' so that it is properly placed in the query URL
+var combined_string = ingredients_array.join(',');
+
+//console.log(combined_string);
+
+var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
+
+console.log(queryURL);
+$.ajax({
+	url: queryURL, 
+	method: "GET", 
+	beforeSend: function(xhr){  
+		xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
+		xhr.setRequestHeader('Accept', 'application/json')
+	}
+})
+.done(function(response) {
+	//console.log(response);
+	for (var i=0; i< response.length; i++){
+		for (var key in response[i]){
+			console.log(key + '->' + response[i][key]);
+		}
+	}
+})
+
+</script>
+</body>
+</html>
+ 		
