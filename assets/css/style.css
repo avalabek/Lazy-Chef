@@ -22,6 +22,12 @@ body{
     height: 100vh;
 
 }
+#formdisplay {
+  display:inline;
+  font-family: "Dosis", sans-serif;
+  
+}
+
 
 
  
