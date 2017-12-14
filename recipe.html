@@ -22,10 +22,10 @@
         <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
        <div class="row" id ="formdisplay">
-    <form class="col s12" id ="ingredients">
+    <form class="col s12" >
       <div class="row">
         <div class="input-field col s12" >
-          <textarea id="textarea1" class="materialize-textarea"></textarea>
+          <textarea id="textarea1" id ="ingredients" class="materialize-textarea"></textarea>
           <label class="active"  for="textarea1" style="color:black; font-family: 'Dosis', sans-serif; font-size:25px"> Enter your ingredients here</label>
       </div>
     </form>
@@ -33,7 +33,7 @@
   </div>
 
       <div class="row center">
-      	<a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
+      	<a class="btn-large waves-effect waves-light orange" class="submit" id="getStarted">Get Started</a>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@ var config = {
   firebase.initializeApp(config);  
 
 //Array that we will push ingredients into on click getStarted Button 
-ingredients_array = [];
+ingredients_array = ["avocado"];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -67,20 +67,23 @@ var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recip
 
 console.log(queryURL);
 
-function getStarted(queryURL){
+
+
 
   $("#getStarted").on("click", function(event){
     event.preventDefault();
-
-    //get input from text box; trim removes whitespace
-    var ingredients = $("#ingredients").val().trim();
-
-    // ingredient that was input goes into ingredients_array
+    $("#ingredients").empty();
+//get input from text box; trim removes whitespace
+    var ingredients = $("#ingredients").val() || '';//this makes it keep working even though #ingredients undefined 
+    // the above is not working to grab the user input TO DO.
+    
+    // ingredient that was input goes into ingredients_array TO DO not working
     ingredients_array.push(ingredients);
-       
-        
+     
+     // removes form to allow recipes in  
+     $("#ingredients").empty();    //can't find the right div to clear, thought #ingredients but no
+    $("#recipedisplay").append("testing 123");
 
-console.log("__________________");
 console.log(ingredients_array);
 
 $.ajax({
@@ -100,11 +103,11 @@ $.ajax({
 	}
 })
 })
-}
-getStarted();
+
+
  
-  // Empties the region associated with the articles
-  $("#recipedisplay").empty();
+
+ 
 
 
   
