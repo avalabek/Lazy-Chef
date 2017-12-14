@@ -13,10 +13,7 @@
  </head>
   
 <body>
-	
-
-
-  
+	 
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
      <br><br>
@@ -25,11 +22,11 @@
         <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
        <div class="row" id ="formdisplay">
-    <form class="col s12">
+    <form class="col s12" id ="ingredients">
       <div class="row">
-        <div class="input-field col s12">
+        <div class="input-field col s12" >
           <textarea id="textarea1" class="materialize-textarea"></textarea>
-          <label class="active" for="textarea1" style="color:black; font-family: 'Dosis', sans-serif; font-size:25px"> Enter your ingredients here</label>
+          <label class="active"  for="textarea1" style="color:black; font-family: 'Dosis', sans-serif; font-size:25px"> Enter your ingredients here</label>
       </div>
     </form>
   </div>
@@ -46,12 +43,8 @@
   </div>
 
 
-  
-
-
-
 <script type="text/javascript">
-//TO DO configure jquery
+//TO DO initialize jquery
 var config = {
     apiKey: "AIzaSyD8Ov99hsKZO0NbPCd1fVBlX3EuWKLX0tI",
     authDomain: "project-one-f8be2.firebaseapp.com",
@@ -62,8 +55,8 @@ var config = {
   };
   firebase.initializeApp(config);  
 
-//Array that we will push ingredients into on click Submit Button 
-ingredients_array = ['strawberry', 'banana', 'apple'];
+//Array that we will push ingredients into on click getStarted Button 
+ingredients_array = [];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -73,6 +66,23 @@ var combined_string = ingredients_array.join(',');
 var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
 
 console.log(queryURL);
+
+function getStarted(queryURL){
+
+  $("#getStarted").on("click", function(event){
+    event.preventDefault();
+
+    //get input from text box; trim removes whitespace
+    var ingredients = $("#ingredients").val().trim();
+
+    // ingredient that was input goes into ingredients_array
+    ingredients_array.push(ingredients);
+       
+        
+
+console.log("__________________");
+console.log(ingredients_array);
+
 $.ajax({
 	url: queryURL, 
 	method: "GET", 
@@ -89,14 +99,13 @@ $.ajax({
 		}
 	}
 })
-
-// Executable code--------------------------------------
-
-
+})
+}
+getStarted();
  
   // Empties the region associated with the articles
   $("#recipedisplay").empty();
-})
+
 
   
 
