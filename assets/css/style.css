@@ -22,10 +22,16 @@ body{
     height: 100vh;
 
 }
-#formdisplay {
+#formdisplay, #recipedisplay {
   display:inline;
-  font-family: "Dosis", sans-serif;
+  font-family: "Quicksand", sans-serif;
+  font-size: 30px;
   
+}
+.card {
+    display:inline-block;
+    width: 50%;
+    float: left;
 }
 
 
