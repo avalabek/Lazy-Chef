@@ -12,6 +12,7 @@
  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
  </head>
   
+
 <body>
 	 
   <div class="section no-pad-bot" id="index-banner">
@@ -31,7 +32,6 @@
     </form>
   </div>
   </div>
-
       <div class="row center">
       	<a class="btn-large waves-effect waves-light orange" class="submit" id="getStarted">Get Started</a>
       </div>
@@ -56,7 +56,7 @@ var config = {
   firebase.initializeApp(config);  
 
 //Array that we will push ingredients into on click getStarted Button 
-ingredients_array = ["avocado"];
+var ingredients_array = [""];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -72,26 +72,24 @@ console.log(queryURL);
 //right now, it is pushing an empty string to the array when button is clicked. Why?
   $("#getStarted").on("click", function(event){
     event.preventDefault();
+    // ingredient that was input goes into ingredients_array TO DO not working
+    ingredients_array.push(ingredients);
     $("#ingredients").submit();
-
     $("#ingredients").empty();
-// ingredient that was input goes into ingredients_array TO DO not working
-ingredients_array.push(ingredients);
-// removes form to allow recipes in  
-     $("#formdisplay").empty();    
+
     
+ //get input from text box; trim removes whitespace not working to grab the user input TO DO.
+    $("#ingredients").val.trim
+     var ingredients = $("#ingredients").val().trim();
+      // || '';  this makes it keep working even though #ingredients undefined 
+     
 
 });
-//get input from text box; trim removes whitespace
-   // var ingredients = $("#ingredients").val() || '';//this makes it keep working even though #ingredients undefined 
-    // the above is not working to grab the user input TO DO.
-    
-    
-    
-     
-     
+console.log(ingredients_array);  
+console.log("ingredients: " + ingredients);
+  console.log(ingredients_array); 
+  
 
-console.log(ingredients_array);
 
 $.ajax({
 	url: queryURL, 
