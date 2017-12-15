@@ -4,17 +4,17 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Dosis" rel="stylesheet">
   <title>Lazy Chef</title>
-</head>
-  
-<body>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-	
-
-
+ <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+ </head>
   
+
+<body>
+	 
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
      <br><br>
@@ -22,27 +22,41 @@
       <div class="row center">
         <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
+       <div class="row" id ="formdisplay">
+    <form class="col s12" id ="ingredients" >
+      <div class="row">
+        <div class="input-field col s12" >
+          <textarea id="textarea1" class="materialize-textarea"></textarea>
+          <label class="active"  for="textarea1" style="color:black; font-family: 'Dosis', sans-serif; font-size:25px"> Enter your ingredients here</label>
+      </div>
+    </form>
+  </div>
+  </div>
       <div class="row center">
-      	<a class="btn-large waves-effect waves-light orange">Get Started</a>
+      	<a class="btn-large waves-effect waves-light orange" class="submit" id="getStarted">Get Started</a>
       </div>
     </div>
   </div>
 
-  <div id="formdisplay">
-  </div>
-
+  
   <div id="recipedisplay">
   </div>
 
 
-  
-
-
-
 <script type="text/javascript">
+//TO DO initialize jquery
+var config = {
+    apiKey: "AIzaSyD8Ov99hsKZO0NbPCd1fVBlX3EuWKLX0tI",
+    authDomain: "project-one-f8be2.firebaseapp.com",
+    databaseURL: "https://project-one-f8be2.firebaseio.com",
+    projectId: "project-one-f8be2",
+    storageBucket: "",
+    messagingSenderId: "426004539514"
+  };
+  firebase.initializeApp(config);  
 
-//Array that we will push ingredients into on click Submit Button 
-ingredients_array = ['strawberry', 'banana', 'apple'];
+//Array that we will push ingredients into on click getStarted Button 
+var ingredients_array = [""];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -52,6 +66,31 @@ var combined_string = ingredients_array.join(',');
 var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
 
 console.log(queryURL);
+
+
+
+//right now, it is pushing an empty string to the array when button is clicked. Why?
+  $("#getStarted").on("click", function(event){
+    event.preventDefault();
+    // ingredient that was input goes into ingredients_array TO DO not working
+    ingredients_array.push(ingredients);
+    $("#ingredients").submit();
+    $("#ingredients").empty();
+
+    
+ //get input from text box; trim removes whitespace not working to grab the user input TO DO.
+    $("#ingredients").val.trim
+     var ingredients = $("#ingredients").val().trim();
+      // || '';  this makes it keep working even though #ingredients undefined 
+     
+
+});
+console.log(ingredients_array);  
+console.log("ingredients: " + ingredients);
+  console.log(ingredients_array); 
+  
+
+
 $.ajax({
 	url: queryURL, 
 	method: "GET", 
@@ -68,6 +107,16 @@ $.ajax({
 		}
 	}
 })
+
+
+
+ 
+
+ 
+
+
+  
+
 
 </script>
 </body>
