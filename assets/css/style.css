@@ -1,5 +1,7 @@
 body{
-	  font-family: 'Fredericka the Great', cursive;
+	  
+
+    font-family: 'Fredericka the Great', cursive;
 
   	font-size: 70px;
   	font-style: bold;
@@ -42,7 +44,14 @@ body{
   font-size: 10px;
   color: #888888;
 }
-
-
+#label {
+  font-family: "Alegreya", serif;
+  color: black;
+  
+  font-size:30px;
+}
+#input {
+  font-family: "Alegreya", serif;;
+}
  
 
