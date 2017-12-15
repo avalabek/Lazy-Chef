@@ -54,7 +54,7 @@
 <script type="text/javascript">
 
 //Array that we will push ingredients into on click Submit Button 
-ingredients_array = ["eggs tomato potato onion"];
+ingredients_array = ["garlic onion potato avocado"];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -81,21 +81,19 @@ $.ajax({
     recipeId.push(response[i].id);
     console.log(recipeId);
 		
-    // var box = $("<button>");
-    // box.attr("title",response[i].title);
 
     // div .card
     var card = $("<div>");
-    card.addClass("card col s12 m2 recipecard");
+    card.addClass("card col s12 m2 waves-effect waves-block waves-light hoverable recipecard");
     card.attr("id", response[i].id);
 
     // div .card-image
     var cardImage = $("<div>");
-    cardImage.addClass("card-image recipecard");
+    cardImage.addClass("card-image  ");
+    
 
     // img .images
     var image = $("<img>");
-          
     image.attr("src", response[i].image);
     image.addClass("images");
 
@@ -103,16 +101,20 @@ $.ajax({
     var cardTitle = $("<span>");
     cardTitle.addClass("card-title");
     cardTitle.attr("id", "recipetitle");
-
-
     cardTitle.text(response[i].title);
+    cardTitle.append("<br><br>");
+    cardTitle.append("Missed: " + response[i].missedIngredientCount);
+    cardTitle.append("Used: " + response[i].usedIngredientCount);
     
+    
+
     cardImage.append(image);
-    cardImage.append(cardTitle);
+    card.append(cardTitle);
     card.append(cardImage);
-    // box.append(card);
+    
+
     $("#card-display").append(card);
-		//for (var key in response[i]){console.log(key + '->' + response[i][key]);}
+		for (var key in response[i]){console.log(key + '->' + response[i][key]);}
 	}
 })
 
