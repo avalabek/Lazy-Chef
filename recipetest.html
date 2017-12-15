@@ -54,7 +54,7 @@
 <script type="text/javascript">
 
 //Array that we will push ingredients into on click Submit Button 
-ingredients_array = [];
+ingredients_array = ["eggs tomato potato onion"];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -86,12 +86,12 @@ $.ajax({
 
     // div .card
     var card = $("<div>");
-    card.addClass("card col s12 m3");
+    card.addClass("card col s12 m2 recipecard");
     card.attr("id", response[i].id);
 
     // div .card-image
     var cardImage = $("<div>");
-    cardImage.addClass("card-image");
+    cardImage.addClass("card-image recipecard");
 
     // img .images
     var image = $("<img>");
@@ -101,7 +101,7 @@ $.ajax({
 
     // span .card-title
     var cardTitle = $("<span>");
-    cardTitle.addClass("card-title");
+    cardTitle.addClass("card-title recipetitle");
 
 
     cardTitle.text(response[i].title);
