@@ -15,65 +15,51 @@
 
 // Variables--------------------------------------------------------------------------------------------
 
+// Executable code--------------------------------------------------------------------------------------
+var form = $("#");
+
+var formDisplay = $("<div>");
+      formDisplay.addClass("input-field col s12");
+      var form = $("<textarea>")
+      form.addClass("materialize-textarea")
+      formDisplay.attr("id", "formDisplay" );
+      $("#formdisplay").append(formDisplay);
+
+ // 
+ //          <textarea id="textarea1" class="materialize-textarea"></textarea>
+ //          <label for="textarea1">Textarea</label>
+ //        </div>
 
 
-// TO DO: verify API authentication key is correct
 
-var authKey = "G0n0upk4remshBs4vzEZ8H9BLQxIp1KmJBpjsnoZl75ZcpPsSo";
 
-// TO DO: API search query The searchTerm will be appended to this when
-// the user hits the search button verify with spoonacular
-var queryURLBase = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients"
-
-// variables will hold the results we get from the user's inputs via HTML
-var searchTerm = [];
-
-// Executable code------------------------------------------------------------------------------------------
-
-function runQuery(queryURL) {
-
- 
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).done(function(response) {
-
-    // Logging the URL so we have access to it for troubleshooting
-    
-    console.log(queryURL);
-    
-    // Log the response to console
-    console.log(response);
-    
-
-   
-}
-
+$ ("")
+// =================================================
 // Click events--------------------------------------------------------------------------------------------
 
 
 // on.("click") function associated with the Search Button
-$("#").on("click", function(event) {
+$("#search").on("click", function(event) {
   
   event.preventDefault();
 
-  var form = $("#");
+  var form = $("#formdisplay");
   console.log(form);
 
   
   // Empties the region associated with the recipes
-  $("#").empty();
+  $("#recipedisplay").empty();
 
   // Grabbing text the user typed into the search input
-  searchTerm = $("#").val().trim();
+  searchTerm = $("#search-term").val().trim();
   var searchURL = queryURLBase + searchTerm;
 
   
-  runQuery(searchURL);
+  runQuery(numResults, searchURL);
 });
 
-// Make a button to clear the top recipes section
-$("#").on("click", function() {
+// This button clears the top recipes section
+$("#clear-all").on("click", function() {
   
-  $("#").empty();//same html section as line 65
+  $("#recipedisplay").empty();
 });
