@@ -63,9 +63,11 @@ var database = firebase.database();
 $("#textarea1").hide()
 
 //Array that we will push ingredients into on click Submit Button 
-var ingredients_array = [""];
+var ingredients_array = ["carrots"];
 
-ingredients_array.push(ingredients);
+//is pushing to array,but search is happening on page load, not after search clicked
+ingredients_array.push("ginger");
+console.log(ingredients_array);
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
@@ -126,10 +128,10 @@ $("#getStarted").on("click", function(event) {
       //form disappears
       $("#form-display").hide();
 
-      // Grabs user input 
+      // Grabs user input Here is the problem: how to grab input
       var ingredients = $("#ingredients").val().trim();
       ingredients_array.push(ingredients);
-      // sendRequest();
+      sendRequest();
   
   // local object to put ingredients in
   var newIngredient = {
@@ -168,9 +170,9 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   
   
 
-
-//wrap ajax call in a function to make easier to reuse
-// function sendRequest (){
+// Functions===============================================================================
+//wrap ajax call in a function 
+function sendRequest (){
 $.ajax({
 	url: queryURL, 
 	method: "GET", 
@@ -220,7 +222,6 @@ $.ajax({
 		//for (var key in response[i]){console.log(key + '->' + response[i][key]);}
 	}
 })
-// }
 
 $(document).on('click', '.card', function(){
   var itemID = $(this).attr("id");
@@ -229,6 +230,7 @@ $(document).on('click', '.card', function(){
   var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +itemID + "/information?includeNutrition=false"; 
 
   console.log(queryURL);
+  
   $.ajax({
     url: queryURL, 
     method: "GET", 
@@ -243,9 +245,7 @@ $(document).on('click', '.card', function(){
   })
 
 });
-
-
-		 
+}//end function sendRequest
 		 
 		
 
