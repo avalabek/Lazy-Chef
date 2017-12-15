@@ -6,6 +6,7 @@ body{
   	line-height: 34px;
   	
 	background: url("../images/eggspastaimg.jpg");
+  
   background-repeat: no-repeat;
   background-size: 100%;
   /*opacity:0.3;*/
@@ -17,17 +18,30 @@ body{
 }
 
 #index-banner{
-	background-color: rgba(200,200,200,.1);
+	/*background-color: rgba(150,150,150,.2);
     /* opacity: .4; */
-    height: 100vh;
+    /*height: 100em;*/
 
 }
-#formdisplay {
-  display:inline;
-  font-family: "Dosis", sans-serif;
+
+.card-image{
+	font-family: ariel;
+	font-size: 20px;
+  font-weight: 400;
+ 
   
 }
 
+.recipecard , .images {
+
+  width:200px;
+  height:200px;
+}
+
+#recipetitle{
+  font-size: 10px;
+  color: #888888;
+}
 
 
  

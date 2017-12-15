@@ -101,7 +101,8 @@ $.ajax({
 
     // span .card-title
     var cardTitle = $("<span>");
-    cardTitle.addClass("card-title recipetitle");
+    cardTitle.addClass("card-title");
+    cardTitle.attr("id", "recipetitle");
 
 
     cardTitle.text(response[i].title);
