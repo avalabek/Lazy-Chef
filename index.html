@@ -86,12 +86,13 @@
   var database = firebase.database();
 
 //Array that we will push ingredients into on click Submit Button 
-ingredients_array = ["avocado"];
+var ingredients_array = [];
 
 //Combines ingredients with a ',' so that it is properly placed in the query URL
 var combined_string = ingredients_array.join(',');
 
-var recipeId=["avocado"];
+var recipeId=[];
+
 
 //console.log(combined_string);
 
@@ -134,6 +135,10 @@ $.ajax({
     }
     console.log("--------" + response.image);
 
+//get input from text box; trim removes whitespace not working to grab the user input TO DO.
+         var ingredients = $("#ingredients").val().trim();
+      // || '';  this makes it keep working even though #ingredients undefined 
+
 //right now, it is pushing an empty string to the array when button is clicked. Why?
   $("#getStarted").on("click", function(event){
     event.preventDefault();
@@ -143,10 +148,7 @@ $.ajax({
     $("#ingredients").empty();
 
     
- //get input from text box; trim removes whitespace not working to grab the user input TO DO.
-    $("#ingredients").val.trim
-     var ingredients = $("#ingredients").val().trim();
-      // || '';  this makes it keep working even though #ingredients undefined 
+ 
      
 
 });
