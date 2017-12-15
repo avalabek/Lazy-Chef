@@ -45,6 +45,8 @@
   <div id="ingredient-table"></div>
 
 <script type="text/javascript">
+
+// VARIABLES==========================================================================  
 var config = {
     apiKey: "AIzaSyD8Ov99hsKZO0NbPCd1fVBlX3EuWKLX0tI",
     authDomain: "project-one-f8be2.firebaseapp.com",
@@ -57,63 +59,77 @@ var config = {
 firebase.initializeApp(config);  
 
 var database = firebase.database();
+// on page load form is hidden
 $("#textarea1").hide()
 
+//Array that we will push ingredients into on click Submit Button 
+var ingredients_array = [""];
+
+ingredients_array.push(ingredients);
+
+//Combines ingredients with a ',' so that it is properly placed in the query URL
+var combined_string = ingredients_array.join(',');
+
+var recipeId=[];
+
+console.log(combined_string);
+
+var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
+
+console.log(queryURL);
+
+// =============Click events===========================================================
 $("#getStarted").on("click", function(event) {
   event.preventDefault();
-
-  //hide getStarted button
+//hide getStarted button
   $("#getStarted").hide();
-
-  //show form
+//show form
   $("#textarea1").show();
-
-  //dynamically create form and search button
+//dynamically create form and search button
   var form = $("<form>");
   form.addClass("col s12");
-   
   var div = $("<div>");
   div.addClass("row");
-    
-  //id ingredients will be used to grab input
+//id ingredients will be used to grab input
   var divtwo = $("<div>");
   divtwo.addClass("input-field col s12");
   divtwo.attr("id", "ingredients");
-    
   var textarea = $("textarea");
   textarea.attr("id", "textarea1");
   textarea.addClass("materialize-textarea");
-  
   var label = $("<label>");
   label.addClass("active");
   label.attr("for", "textarea1");
   label.attr("id", "label");
   label.text("Enter your ingredients");
 
- //append form to page
+//append form to page
   divtwo.append(label);
   divtwo.append(textarea);
   div.append(divtwo);
   form.append(div);
   $("#form-display").append(form);
 
-   //search button
-   var anchor = $("<a>");
-   anchor.addClass("btn-large waves-effect waves-light orange");
-   anchor.attr("id", "search");
-   anchor.text("Search");
+//search button
+  var anchor = $("<a>");
+  anchor.addClass("btn-large waves-effect waves-light orange");
+  anchor.attr("id", "search");
+  anchor.text("Search");
 
-   //append button to page
-   $("#button-display").append(anchor);
-    $("#search").on("click", function(event){
-    event.preventDefault();
-    alert("this is only a test.");
+//append button to page
+  $("#button-display").append(anchor);
 
-    //form disappears
-    $("#textarea1").hide();
 
-  // Grabs user input 
-  var ingredients = $("#ingredients").val().trim();
+      $("#search").on("click", function(event){
+      event.preventDefault();
+    
+      //form disappears
+      $("#form-display").hide();
+
+      // Grabs user input 
+      var ingredients = $("#ingredients").val().trim();
+      ingredients_array.push(ingredients);
+      // sendRequest();
   
   // local object to put ingredients in
   var newIngredient = {
@@ -130,15 +146,9 @@ $("#getStarted").on("click", function(event) {
   $("#ingredients").val("");
   
   return false;
-  })
+  })//search click event
 
-
-
-
-
-})
-
-// ingredients are entered; then search button is clicked
+})//getStarted click event
 
 
 // Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
@@ -157,19 +167,10 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
   
   
-//Array that we will push ingredients into on click Submit Button 
-var ingredients_array = [""];
 
-//Combines ingredients with a ',' so that it is properly placed in the query URL
-var combined_string = ingredients_array.join(',');
 
-var recipeId=[];
-
-//console.log(combined_string);
-
-var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
-
-console.log(queryURL);
+//wrap ajax call in a function to make easier to reuse
+// function sendRequest (){
 $.ajax({
 	url: queryURL, 
 	method: "GET", 
@@ -219,6 +220,7 @@ $.ajax({
 		//for (var key in response[i]){console.log(key + '->' + response[i][key]);}
 	}
 })
+// }
 
 $(document).on('click', '.card', function(){
   var itemID = $(this).attr("id");
