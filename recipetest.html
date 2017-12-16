@@ -152,16 +152,17 @@ $("#getStarted").on("click", function(event) {
       sendRequest();
   
   // local object to put ingredients in
-  var newIngredient = {
-    name: ingredients
+  //var newIngredient = {
+    //name: ingredients
    
-  };
+  //});
   // send ingredients to database
   // database.ref().push(newIngredient);
   // console.log(newIngredient.name);
     
   // Clear form
   $("#textarea1").val("");
+
   
   //return false;
   })//search click event
@@ -177,7 +178,9 @@ $("#getStarted").on("click", function(event) {
   
   
 // Functions===============================================================================
-//wrap ajax call in a function 
+//wrap ajax call in a function
+
+console.log(queryURL);
 function sendRequest (){
 $.ajax({
 	url: queryURL, 
