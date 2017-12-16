@@ -1,256 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Alegreya" rel="stylesheet">
-  <title>Lazy Chef</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Alegreya" rel="stylesheet">
+    <title>Lazy Chef</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+</head>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
-  </head>
-  
 <body>
-  
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-     <br><br>
-      <h1 class="header center projectname">LazyChef</h1>
-      <div class="row center">
-        <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
-      </div>
- <div class="row">
-    <form class="col s12" >
-      <div class="row" >
-        <div class="input-field col s12" id = "ingredients">
-          <textarea id="textarea1" class="materialize-textarea" ></textarea> 
-          <label id="label" for="textarea1"></label>
-         </div>
-      </div>
-    </form>
-  </div>
-
-
-      <div class="row center">
-      	<a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
-      </div>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <br>
+            <br>
+            <h1 class="header center projectname">LazyChef</h1>
+            <div class="row center">
+                <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
+            </div>
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12" id="ingredients">
+                            <textarea id="textarea1" class="materialize-textarea"></textarea>
+                            <label id="label" for="textarea1"></label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row center">
+                <a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="row" id="form-display"></div>
+    <div class="row center" id="button-display"></div>
+    <div class="row" id="card-display"></div>
+    <div id="ingredient-table">
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>Ingredients</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="map"></div>
+    <script type="text/javascript">
+    // VARIABLES==========================================================================  
+    //initialize the page
+    getStarted();
+    var config = {
+        apiKey: "AIzaSyD8Ov99hsKZO0NbPCd1fVBlX3EuWKLX0tI",
+        authDomain: "project-one-f8be2.firebaseapp.com",
+        databaseURL: "https://project-one-f8be2.firebaseio.com",
+        projectId: "project-one-f8be2",
+        storageBucket: "",
+        messagingSenderId: "426004539514"
+    };
 
-  <div class="row" id="form-display"></div>
-  <div class = "row center" id = "button-display"></div>
-  <div class="row" id="card-display"></div> 
-  <div id="ingredient-table"></div>
+    firebase.initializeApp(config);
 
-<script type="text/javascript">
+    var database = firebase.database();
+    // on page load form is hidden
+    $("#textarea1").hide();
+    $("#table").hide();
 
-// VARIABLES==========================================================================  
-var config = {
-    apiKey: "AIzaSyD8Ov99hsKZO0NbPCd1fVBlX3EuWKLX0tI",
-    authDomain: "project-one-f8be2.firebaseapp.com",
-    databaseURL: "https://project-one-f8be2.firebaseio.com",
-    projectId: "project-one-f8be2",
-    storageBucket: "",
-    messagingSenderId: "426004539514"
-  };
+    //Array that we will push ingredients into on click Submit Button 
+    var ingredients_array = ["carrots"];
+    var ingredients = $("#ingredients").val().trim();
 
-firebase.initializeApp(config);  
+    //is pushing to array,but not when I change it to ingredients
+    ingredients_array.push(ingredients);
+    // console.log(ingredients_array);
 
-var database = firebase.database();
-// on page load form is hidden
-$("#textarea1").hide()
+    //Combines ingredients with a ',' so that it is properly placed in the query URL
+    var combined_string = ingredients_array.join(',');
 
-//Array that we will push ingredients into on click Submit Button 
-var ingredients_array = ["carrots"];
+    var recipeId = [];
 
-//is pushing to array,but search is happening on page load, not after search clicked
-ingredients_array.push("ginger");
-console.log(ingredients_array);
+    // console.log(combined_string);
 
-//Combines ingredients with a ',' so that it is properly placed in the query URL
-var combined_string = ingredients_array.join(',');
+    var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1";
 
-var recipeId=[];
+    // console.log(queryURL);
 
-console.log(combined_string);
+    // =============Click events===========================================================
 
-var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1"; 
+    // wrapped the getStarted click event in a function; call this function to initalize page
+    function getStarted() {
+        $("#getStarted").on("click", function(event) {
+            event.preventDefault();
 
-console.log(queryURL);
+            //hide getStarted button
+            $("#getStarted").hide();
 
-// =============Click events===========================================================
-$("#getStarted").on("click", function(event) {
-  event.preventDefault();
-//hide getStarted button
-  $("#getStarted").hide();
-//show form
-  $("#textarea1").show();
-//dynamically create form and search button
-  var form = $("<form>");
-  form.addClass("col s12");
-  var div = $("<div>");
-  div.addClass("row");
-//id ingredients will be used to grab input
-  var divtwo = $("<div>");
-  divtwo.addClass("input-field col s12");
-  divtwo.attr("id", "ingredients");
-  var textarea = $("textarea");
-  textarea.attr("id", "textarea1");
-  textarea.addClass("materialize-textarea");
-  var label = $("<label>");
-  label.addClass("active");
-  label.attr("for", "textarea1");
-  label.attr("id", "label");
-  label.text("Enter your ingredients");
+            //show form
+            $("#textarea1").show();
 
-//append form to page
-  divtwo.append(label);
-  divtwo.append(textarea);
-  div.append(divtwo);
-  form.append(div);
-  $("#form-display").append(form);
+            //dynamically create form and search button
+            var form = $("<form>");
+            form.addClass("col s12");
+            var div = $("<div>");
+            div.addClass("row");
 
-//search button
-  var anchor = $("<a>");
-  anchor.addClass("btn-large waves-effect waves-light orange");
-  anchor.attr("id", "search");
-  anchor.text("Search");
+            //id ingredients will be used to grab input
+            var divtwo = $("<div>");
+            divtwo.addClass("input-field col s12");
+            divtwo.attr("id", "ingredients");
+            var textarea = $("textarea");
+            textarea.attr("id", "textarea1");
+            textarea.addClass("materialize-textarea");
+            var label = $("<label>");
+            label.addClass("active");
+            label.attr("for", "textarea1");
+            label.attr("id", "label");
+            label.text("Enter your ingredients");
 
-//append button to page
-  $("#button-display").append(anchor);
+            //append form to page
+            divtwo.append(label);
+            divtwo.append(textarea);
+            div.append(divtwo);
+            form.append(div);
+            $("#form-display").append(form);
 
+            //search button
+            var anchor = $("<a>");
+            anchor.addClass("btn-large waves-effect waves-light orange");
+            anchor.attr("id", "search");
+            anchor.text("Search");
 
-      $("#search").on("click", function(event){
-      event.preventDefault();
-    
-      //form disappears
-      $("#form-display").hide();
+            //append button to page
+            $("#button-display").append(anchor);
 
-      // Grabs user input Here is the problem: how to grab input
-      var ingredients = $("#ingredients").val().trim();
-      ingredients_array.push(ingredients);
-      sendRequest();
-  
-  // local object to put ingredients in
-  var newIngredient = {
-    name: ingredients
-   
-  };
+            //second click event=======================================================
+            $("#search").on("click", function(event) {
+                event.preventDefault();
 
-  // send ingredients to database
-  database.ref().push(newIngredient);
+                //form disappears
+                $("#form-display").hide();
+                anchor.hide();
 
-  console.log(newIngredient.name);
-    
-  // Clear form
-  $("#ingredients").val("");
-  
-  return false;
-  })//search click event
+                //create new button to start again
+                var searchAgain = $("<a>");
+                searchAgain.addClass("btn-large waves-effect waves-light orange");
+                searchAgain.attr("id", "searchAgain");
+                searchAgain.text("Search again");
+                
+                $("#button-display").append(searchAgain);
+                  $("#searchAgain").on("click", function(event){
+                    //clear the former recipes
+                    $("#card-display").empty();
+                    //TO DO this is not ideal as it simply reloads page
+                  location.reload();
+                    //need to assign to search again same functionality of get started
 
-})//getStarted click event
-
-
-// Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
-database.ref().on("child_added", function(childSnapshot, prevChildKey) {
-
-  console.log(childSnapshot.val());
-
-  var ingredientName = childSnapshot.val().name;
-
-  console.log(ingredientName);
-
-   // Add each ingredient into the table
-  $("#ingredient-table > tbody").append("<tr><td>" + ingredientName + "</td><td>" + "</td></tr>");
-
-});
-
-  
-  
-
-// Functions===============================================================================
-//wrap ajax call in a function 
-function sendRequest (){
-$.ajax({
-	url: queryURL, 
-	method: "GET", 
-	beforeSend: function(xhr){  
-		xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
-		xhr.setRequestHeader('Accept', 'application/json')
-	}
-})
-.done(function(response) {
-	//console.log(response);
-	for (var i=0; i< response.length; i++){
-		
-    recipeId.push(response[i].id);
-    console.log(recipeId);
-		
-    // var box = $("<button>");
-    // box.attr("title",response[i].title);
-
-    // div .card
-    var card = $("<div>");
-    card.addClass("card col s12 m2 recipecard");
-    card.attr("id", response[i].id);
-
-    // div .card-image
-    var cardImage = $("<div>");
-    cardImage.addClass("card-image recipecard");
-
-    // img .images
-    var image = $("<img>");
-          
-    image.attr("src", response[i].image);
-    image.addClass("images");
-
-    // span .card-title
-    var cardTitle = $("<span>");
-    cardTitle.addClass("card-title");
-    cardTitle.attr("id", "recipetitle");
+                    
+//TO DO I want to call getStarted(); to load page again but think scope issue
+               
+                })
 
 
-    cardTitle.text(response[i].title);
-    
-    cardImage.append(image);
-    cardImage.append(cardTitle);
-    card.append(cardImage);
-    // box.append(card);
-    $("#card-display").append(card);
-		//for (var key in response[i]){console.log(key + '->' + response[i][key]);}
-	}
-})
+                // Grabs user input Here is the problem: how to grab input textarea not working
+                var ingredients = $("#ingredients").val().trim();
+                ingredients_array.push(ingredients);
+                sendRequest();
+                $("#table").show();
+                var tableData = $("<td>");
+                tableData.text(this.ingredients);
+                // local object to put ingredients in
+                var newIngredient = {
+                    name: ingredients
 
-$(document).on('click', '.card', function(){
-  var itemID = $(this).attr("id");
-  console.log("user clicked on item " + itemID);
+                };
 
-  var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +itemID + "/information?includeNutrition=false"; 
+                // send ingredients to database
+                database.ref().push(newIngredient);
 
-  console.log(queryURL);
-  
-  $.ajax({
-    url: queryURL, 
-    method: "GET", 
-    beforeSend: function(xhr){  
-      xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
-      xhr.setRequestHeader('Accept', 'application/json')
-  }
-})
-  .done(function(response) {
-    console.log(response.sourceUrl);
-    window.open(response.sourceUrl);
-  })
+                // console.log(newIngredient.name);
 
-});
-}//end function sendRequest
-		 
-		
+                // Clear form
+                $("#ingredients").val("");
+
+                return false;
+            }) //search click event
+
+        }) //getStarted click event
+    } //getStarted function end
+
+
+    // Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
+    database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+
+        // console.log(childSnapshot.val());
+
+        var ingredientName = childSnapshot.val().name;
+
+        // console.log(ingredientName);
+
+        // Add each ingredient into the table
+        $("#table > tbody").append("<tr><td>" + this.ingredients_array);
+
+    });
 
 
 
-</script>
+
+    // Functions===============================================================================
+    //wrap spoonacular ajax call in a function 
+    function sendRequest() {
+        $.ajax({
+                url: queryURL,
+                method: "GET",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
+                    xhr.setRequestHeader('Accept', 'application/json')
+                }
+            })
+            .done(function(response) {
+                //console.log(response);
+                for (var i = 0; i < response.length; i++) {
+
+                    recipeId.push(response[i].id);
+                    console.log(recipeId);
+
+                    // var box = $("<button>");
+                    // box.attr("title",response[i].title);
+
+                    // div .card
+                    var card = $("<div>");
+                    card.addClass("card col s12 m2 recipecard");
+                    card.attr("id", response[i].id);
+
+                    // div .card-image
+                    var cardImage = $("<div>");
+                    cardImage.addClass("card-image recipecard");
+
+                    // img .images
+                    var image = $("<img>");
+
+                    image.attr("src", response[i].image);
+                    image.addClass("images");
+
+                    // span .card-title
+                    var cardTitle = $("<span>");
+                    cardTitle.addClass("card-title");
+                    cardTitle.attr("id", "recipetitle");
+
+
+                    cardTitle.text(response[i].title);
+
+                    cardImage.append(image);
+                    cardImage.append(cardTitle);
+                    card.append(cardImage);
+
+                    $("#card-display").append(card);
+
+                }
+            })
+
+        $(document).on('click', '.card', function() {
+            var itemID = $(this).attr("id");
+            console.log("user clicked on item " + itemID);
+
+            var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" + itemID + "/information?includeNutrition=false";
+
+            console.log(queryURL);
+
+            $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
+                        xhr.setRequestHeader('Accept', 'application/json')
+                    }
+                })
+                .done(function(response) {
+                    console.log(response.sourceUrl);
+                    window.open(response.sourceUrl);
+                })
+
+        });
+    } //end function sendRequest
+
+    //TO DO add new function to call Google API
+    </script>
 </body>
+
 </html>
