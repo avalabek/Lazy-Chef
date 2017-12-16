@@ -6,8 +6,8 @@
   <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Alegreya" rel="stylesheet">
   <title>Lazy Chef</title>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
   </head>
@@ -35,7 +35,7 @@
 
 
       <div class="row center">
-      	<a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
+        <a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
       </div>
     </div>
   </div>
@@ -152,17 +152,16 @@ $("#getStarted").on("click", function(event) {
       sendRequest();
   
   // local object to put ingredients in
-  //var newIngredient = {
-    //name: ingredients
+  var newIngredient = {
+    name: ingredients
    
-  //});
+  };
   // send ingredients to database
   // database.ref().push(newIngredient);
   // console.log(newIngredient.name);
     
   // Clear form
   $("#textarea1").val("");
-
   
   //return false;
   })//search click event
@@ -178,17 +177,15 @@ $("#getStarted").on("click", function(event) {
   
   
 // Functions===============================================================================
-//wrap ajax call in a function
-
-console.log(queryURL);
+//wrap ajax call in a function 
 function sendRequest (){
 $.ajax({
-	url: queryURL, 
-	method: "GET", 
-	beforeSend: function(xhr){  
-		xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
-		xhr.setRequestHeader('Accept', 'application/json')
-	}
+  url: queryURL, 
+  method: "GET", 
+  beforeSend: function(xhr){  
+    xhr.setRequestHeader('X-Mashape-Key', '0NlfRZkMP2mshjWL30gtKXh3l6fYp16R7Z4jsnxYY5nUKHDcPA');
+    xhr.setRequestHeader('Accept', 'application/json')
+  }
 })
 .done(function(response) {
   //console.log(response);
@@ -257,8 +254,8 @@ $(document).on('click', '.card', function(){
 });
 
 }//end function sendRequest
-		 
-		
+     
+    
 </script>
 </body>
 </html>
