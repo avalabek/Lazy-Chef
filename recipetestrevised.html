@@ -22,7 +22,7 @@
         <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
  
-<div class="row">
+<!--<div class="row">
     <form class="col s12" >
       <div class="row" >
         <div class="input-field col s12" id = "ingredients">
@@ -31,7 +31,7 @@
          </div>
       </div>
     </form> 
-  </div>
+  </div> -->
 
 
       <div class="row center">
@@ -97,15 +97,16 @@ $("#getStarted").on("click", function(event) {
   var form = $("<form>");
   form.addClass("col s12");
   
-  var div = $("<div>");
+  var div = $("<div id='firstrow'>");
   div.addClass("row");
+
 
 //id ingredients will be used to grab input
   var divtwo = $("<div>");
   divtwo.addClass("input-field col s12");
   divtwo.attr("id", "ingredients");
   
-  var textarea = $("textarea");
+  var textarea = $("<textarea>");
   textarea.attr("id", "textarea1");
   textarea.addClass("materialize-textarea");
   
