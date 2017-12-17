@@ -1,11 +1,11 @@
 body{
-	  font-family: 'Fredericka the Great', cursive;
+	  
 
-  	font-size: 70px;
-  	font-style: bold;
-  	line-height: 34px;
+  	
+  	
   	
 	background: url("../images/eggspastaimg.jpg");
+  
   background-repeat: no-repeat;
   background-size: 100%;
   /*opacity:0.3;*/
@@ -13,16 +13,67 @@ body{
 
 .projectname{
 	font-size:85px;
+  font-family: 'Fredericka the Great', cursive;
+  font-weight: 600;
 
 }
 
 #index-banner{
-	background-color: rgba(200,200,200,.1);
+	/*background-color: rgba(150,150,150,.2);
     /* opacity: .4; */
-    height: 100vh;
+    /*height: 100em;*/
 
 }
 
+.card-image{
+	font-family: ariel;
+	font-size: 20px;
+  font-weight: 400;
+ 
+  
+}
 
+.recipecard   {
+
+  width:200px;
+  height:350px;
+  text-align: center;
+  margin:20px;
+}
+
+.images{
+  width:200px;
+  height:200px;
+}
+
+#recipetitle{
+  font-size: 18px;
+  color: black;
+}
+
+#card-display{
+  margin-left:135px;
+}
+
+#label{
+  color:black;
+  font-size: 30px;
+  font-weight: 400;
+
+}
+
+#textarea1 {
+
+ background: #ffffff;
+ margin-top: 20px;
+ font-size: 20px;
+
+
+
+}
+
+#ingredients {
+  
+}
  
 
