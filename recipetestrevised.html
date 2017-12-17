@@ -21,18 +21,6 @@
       <div class="row center">
         <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
- 
-<!--<div class="row">
-    <form class="col s12" >
-      <div class="row" >
-        <div class="input-field col s12" id = "ingredients">
-          <textarea id="textarea1" class="materialize-textarea" ></textarea>
-          <label id="label" for="textarea1"></label>
-         </div>
-      </div>
-    </form> 
-  </div> -->
-
 
       <div class="row center">
       	<a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
@@ -97,7 +85,7 @@ $("#getStarted").on("click", function(event) {
   var form = $("<form>");
   form.addClass("col s12");
   
-  var div = $("<div id='firstrow'>");
+  var div = $("<div>");
   div.addClass("row");
 
 
@@ -108,13 +96,14 @@ $("#getStarted").on("click", function(event) {
   
   var textarea = $("<textarea>");
   textarea.attr("id", "textarea1");
-  textarea.addClass("materialize-textarea");
+  textarea.addClass("materialize-textarea inputarea");
+  textarea.attr("placeholder", "   ex. carrots celery onion");
   
   var label = $("<label>");
   label.addClass("active");
   label.attr("for", "textarea1");
   label.attr("id", "label");
-  label.text("Enter your ingredients");
+  label.text("Enter your ingredients: ");
 
 //append form to page
   divtwo.append(label);
@@ -137,6 +126,7 @@ $("#getStarted").on("click", function(event) {
     
  //form disappears
   $("#textarea1").empty();
+  $("#card-display").empty();
       
   //var ingredients = $("#ingredients").val().trim();
       var ingredients = $("#textarea1").val().trim();
@@ -158,8 +148,8 @@ $("#getStarted").on("click", function(event) {
    
   };
   // send ingredients to database
-  // database.ref().push(newIngredient);
-  // console.log(newIngredient.name);
+   database.ref().push(newIngredient);
+   console.log(newIngredient.name);
     
   // Clear form
   $("#textarea1").val("");
@@ -217,8 +207,8 @@ $.ajax({
     cardTitle.attr("id", "recipetitle");
     cardTitle.text(response[i].title);
     cardTitle.append("<br><br>");
-    cardTitle.append("Missed: " + response[i].missedIngredientCount);
-    cardTitle.append("Used: " + response[i].usedIngredientCount);
+    cardTitle.append("Missing: " + response[i].missedIngredientCount);
+    cardTitle.append("Uses: " + response[i].usedIngredientCount);
     
     
 
