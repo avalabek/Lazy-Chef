@@ -8,6 +8,8 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <!-- TO DO ADD This Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
   </head>
@@ -38,9 +40,16 @@
   </div> 
   
   <div id="ingredient-table">
+            
   </div>
 
 <script type="text/javascript">
+
+$(document).ready(function() {
+  //initialize materialize for dynamically created elements
+   Materialize.updateTextFields();
+   
+
 
 // FIREBASE CONFIG===================================================================
 var config = {
@@ -96,14 +105,26 @@ $("#getStarted").on("click", function(event) {
   
   var textarea = $("<textarea>");
   textarea.attr("id", "textarea1");
-  textarea.addClass("materialize-textarea inputarea");
+  textarea.addClass("materialize-textarea inputarea validate");
+  textarea.attr("name", "test_textarea");
   textarea.attr("placeholder", "   ex. carrots celery onion");
+  textarea.attr("required", "");
+  textarea.attr("aria-required", "true")
+  textarea.attr("data-error", "Please enter valid ingredients.")
+  textarea.addClass("leftalert");
+
   
   var label = $("<label>");
-  label.addClass("active");
+  label.addClass("active validate");
   label.attr("for", "textarea1");
+  label.attr("for", "test_textarea")
   label.attr("id", "label");
   label.text("Enter your ingredients: ");
+  label.attr("data-error", "Please enter valid ingredients.");
+  label.attr("required","");
+  label.attr("aria-required", "true");
+  label.addClass("leftalert");
+  
 
 //append form to page
   divtwo.append(label);
@@ -127,6 +148,7 @@ $("#getStarted").on("click", function(event) {
  //form disappears
   $("#textarea1").empty();
   $("#card-display").empty();
+   // validateInput();
       
   //var ingredients = $("#ingredients").val().trim();
       var ingredients = $("#textarea1").val().trim();
@@ -157,16 +179,17 @@ $("#getStarted").on("click", function(event) {
   //return false;
   })//search click event
 })//getStarted click event
-// Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
-// database.ref().on("child_added", function(childSnapshot, prevChildKey) {
-//   console.log(childSnapshot.val());
-//   var ingredientName = childSnapshot.val().name;
-//   console.log(ingredientName);
-//    // Add each ingredient into the table
-//   $("#ingredient-table > tbody").append("<tr><td>" + ingredientName + "</td><td>" + "</td></tr>");
-// });
-  
-  
+ // Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
+ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+   console.log(childSnapshot.val());
+   var ingredientName = childSnapshot.val().name;
+   console.log(ingredientName);
+    // Add each ingredient into the table
+       // $("#ingredient-table > tbody").append("<tr><td>" + ingredientName + "</td><td>");
+ });
+ 
+
+ 
 // Functions===============================================================================
 //wrap ajax call in a function 
 function sendRequest (){
@@ -222,6 +245,35 @@ $.ajax({
   }
 })
 
+// $("#textarea1").validate({
+//   rules: {
+//     textarea: {
+//       required:true,
+      
+//     },
+//     messages: {
+//       textarea: {
+//         required: "Please enter more than one ingredient."
+//       },
+//       errorElement: "div",
+//       errorPlacement: function(error, element)
+//       {
+//         var placement =$(element).data("error");
+//         if (placement){
+//           $(placement).append(error)
+//         }else {
+//           error.insertAfter(element);
+//         }
+//         }
+//       }
+//       }
+//     })
+  
+
+
+
+
+
 $(document).on('click', '.card', function(){
   var itemID = $(this).attr("id");
   console.log("user clicked on item " + itemID);
@@ -245,8 +297,9 @@ $(document).on('click', '.card', function(){
 });
 
 }//end function sendRequest
-		 
-		
+	});//end document.ready
+
+  		
 </script>
 </body>
 </html>
