@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Alegreya" rel="stylesheet">
+  <title>Lazy Chef</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  </head>
+  
+<body>
+
+
+<!-- Title Page -->   
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+     <br><br>
+      <h1 class="header center projectname">LazyChef</h1>
+      <div class="row center">
+        <h5 class="header col s12 light" id="description">Your Ingredients. Our Recipes. Made Easy. </h5>
+      </div>
+
+      <div class="row center">
+      	<a class="btn-large waves-effect waves-light orange" id="getStarted">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+<!-- Input Form Area-->   
+  <div class="row center" id="form-display">
+  </div>
+
+<!-- Button Display Area -->   
+  <div class = "row center" id = "button-display">
+  </div>
+
+<!-- Table of Recent Searches --> 
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <div class="row center">
+          <table id="ingredient-table" class=" col s12 bordered" >
+            <thead>
+              <tr>
+                <th id="tabletitle">Recent Ingredient Searches</th>
+              </tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  
+<!-- Card Display --> 
+  <div class="row" id="card-display">
+  </div> 
+
+ 
+<!-- Modal Structure -->
+   <div id="alertModal" class="modal">
+    <div class="modal-content">
+      <h4>Error Found</h4>
+      <p></p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
+  
+
+
+
+<script type="text/javascript" src="./assets/javascript/app.js"></script>
+
+</body>
+</html>
