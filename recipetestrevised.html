@@ -10,16 +10,18 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   </head>
   
 <body>
-  
+
+<!-- Title Page -->   
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
      <br><br>
       <h1 class="header center projectname">LazyChef</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Your Ingredients. Our Recipes. Made Easy. </h5>
+        <h5 class="header col s12 light" id="description">Your Ingredients. Our Recipes. Made Easy. </h5>
       </div>
 
       <div class="row center">
@@ -28,19 +30,61 @@
     </div>
   </div>
 
-  <div class="row" id="form-display">
-  </div>
-  
-  <div class = "row center" id = "button-display">
-  </div>
-  
-  <div class="row" id="card-display">
-  </div> 
-  
-  <div id="ingredient-table">
+<!-- Input Form Area-->   
+  <div class="row center" id="form-display">
   </div>
 
+<!-- Button Display Area -->   
+  <div class = "row center" id = "button-display">
+  </div>
+
+<!-- Table of Recent Searches --> 
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <div class="row center">
+          <table id="ingredient-table" class=" col s12 bordered" >
+            <thead>
+              <tr>
+                <th id="tabletitle">Recent Ingredient Searches</th>
+              </tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  
+<!-- Card Display --> 
+  <div class="row" id="card-display">
+  </div> 
+
+ 
+<!-- Modal Structure -->
+   <div id="alertModal" class="modal">
+    <div class="modal-content">
+      <h4>Error Found</h4>
+      <p></p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
+  
+
+
+
 <script type="text/javascript">
+
+  $(document).ready(function(){
+
+    // on page load table is hidden
+    $("#ingredient-table").hide();
+
+    // on page load form is hidden
+    $("#textarea1").hide()
+
+  });
 
 // FIREBASE CONFIG===================================================================
 var config = {
@@ -53,27 +97,28 @@ var config = {
   };
 firebase.initializeApp(config);  
 var database = firebase.database();
+//====================================================================================
 
-// on page load form is hidden
-$("#textarea1").hide()
 
-// VARIABLES==========================================================================  
+// GLOBAL VARIABLES===================================================================  
 
 //Array that we will push ingredients into on click Submit Button 
 var ingredients_array = [];
 
-//Stores recipe ID from first AJAX call
+//Stores recipe ID from first AJAX call to spoonacular API 
 var recipeId=[];
 
 var queryURL;  
+//=====================================================================================
 
 
-
-// CLICK EVENTS========================================================================
+// GET STARTED BUTTON CLICK EVENT========================================================================
 
 $("#getStarted").on("click", function(event) {
   
   event.preventDefault();
+
+
 
 //hide getStarted button
   $("#getStarted").hide();
@@ -81,15 +126,13 @@ $("#getStarted").on("click", function(event) {
 //show form
   $("#textarea1").show();
 
-//dynamically create form and search button
+//show recently searched table from firebase
+  $("#ingredient-table").show();
+
+//dynamically create form display
   var form = $("<form>");
   form.addClass("col s12");
   
-  var div = $("<div>");
-  div.addClass("row");
-
-
-//id ingredients will be used to grab input
   var divtwo = $("<div>");
   divtwo.addClass("input-field col s12");
   divtwo.attr("id", "ingredients");
@@ -103,73 +146,115 @@ $("#getStarted").on("click", function(event) {
   label.addClass("active");
   label.attr("for", "textarea1");
   label.attr("id", "label");
-  label.text("Enter your ingredients: ");
+  label.text("Enter your ingredients ");
 
 //append form to page
   divtwo.append(label);
   divtwo.append(textarea);
-  div.append(divtwo);
-  form.append(div);
+  form.append(divtwo);
   $("#form-display").append(form);
 
-//search button
+//dynamically create search buttons
   var anchor = $("<a>");
   anchor.addClass("btn-large waves-effect waves-light orange");
   anchor.attr("id", "search");
-  anchor.text("Search");
+  anchor.text("Search Recipes");
 
+  var mapButton = $("<a>");
+  mapButton.addClass("btn-large waves-effect waves-light blue");
+  mapButton.attr("id", "mapsearch");
+  mapButton.text("Find Nearest Grocery Stores");
+  
 //append button to page
   $("#button-display").append(anchor);
+  $("#button-display").append("<br><br>");
+  $("#button-display").append(mapButton);
       
+  
+  
+//SEARCH FOR RECIPE ON CLICK==(Still inside of get started on click event)====================================
+  
   $("#search").on("click", function(event){
       event.preventDefault();
-    
- //form disappears
+
+  //form disappears
   $("#textarea1").empty();
   $("#card-display").empty();
+  $("#ingredient-table").hide();
       
-  //var ingredients = $("#ingredients").val().trim();
-      var ingredients = $("#textarea1").val().trim();
+  //store value of input in variable 
+  var ingredients = $("#textarea1").val().trim();
 
-      console.log(ingredients);
-      //ingredients_array.push(ingredients);
-      ingredients_array = ingredients.split(" ");
-      console.log("Ingredients array = " + ingredients_array);
-
-      var combined_string = ingredients_array.join(',');
-      console.log(combined_string);
-      queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1";
-      console.log(queryURL);
-      sendRequest();
-  
   // local object to put ingredients in
   var newIngredient = {
-    name: ingredients
-   
-  };
+      name: ingredients
+   };
   // send ingredients to database
-   database.ref().push(newIngredient);
-   console.log(newIngredient.name);
+  database.ref().push(newIngredient);
+      
+  //ingredients_array.push(ingredients);
+  ingredients_array = ingredients.split(" ");
+  console.log("Ingredients array = " + ingredients_array);
+
+  //add User Input Validation Here
+   var x=ingredients_array.length;
+    if (x<2){
+      var message = 'Please enter more than one ingredient!';
+    $('#alertModal').find('.modal-content p').text(message);
+    $('#alertModal').show('modal');
+    }
+   
+  
+  
+  var combined_string = ingredients_array.join(',');
+  //console.log(combined_string);
+
+
+    queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&ingredients=" + combined_string + "limitLicense=false&number=5&ranking=1";
+      console.log(queryURL);
+      
+      //call function to send API request 
+      sendRequest();
+  
     
   // Clear form
   $("#textarea1").val("");
   
-  //return false;
-  })//search click event
-})//getStarted click event
-// Firebase event for adding ingredients to the database and a row in the html when a user adds an entry
-// database.ref().on("child_added", function(childSnapshot, prevChildKey) {
-//   console.log(childSnapshot.val());
-//   var ingredientName = childSnapshot.val().name;
-//   console.log(ingredientName);
-//    // Add each ingredient into the table
-//   $("#ingredient-table > tbody").append("<tr><td>" + ingredientName + "</td><td>" + "</td></tr>");
-// });
+  })
+//END OF SEARCH RECIPES ON CLICK EVENT============================================================================
   
+//MAP SEARCH ON CLICK EVENT=================================================================================
   
-// Functions===============================================================================
-//wrap ajax call in a function 
+  $("#mapsearch").on("click", function(event){
+      event.preventDefault();
+      window.open("googleAddressInput.html", target="_blank");
+
+  })
+
+// END OF MAP SEARCH ON CLICK EVENT==============================================================================
+
+})
+
+// END OF GET STARTED ON CLICK EVENT============================================================================
+
+database.ref().on("child_added", function(childSnapshot) {
+    //logs the snapshot of the new child added to firebase 
+    //console.log(childSnapshot.val());
+
+    var ingredients = childSnapshot.val().name;
+    //console.log(ingredients);
+
+    //append ingredients value into ingredient table recent searches
+    $("#ingredient-table > tbody").append("<tr><td>" + ingredients + "</td></tr>");
+
+})
+
+  
+// SPOONACULAR FUNCTION CALL=======================================================================
+
 function sendRequest (){
+
+//intial request to grab recipe ID 
 $.ajax({
 	url: queryURL, 
 	method: "GET", 
@@ -186,49 +271,47 @@ $.ajax({
     console.log(recipeId);
     
 
-    // div .card
+    // dynamically create materialize cards that hold the recipe ID 
     var card = $("<div>");
     card.addClass("card col s12 m2 waves-effect waves-block waves-light hoverable recipecard");
     card.attr("id", response[i].id);
 
-    // div .card-image
     var cardImage = $("<div>");
     cardImage.addClass("card-image ");
     
-
-    // img .images
     var image = $("<img>");
     image.attr("src", response[i].image);
     image.addClass("images");
 
-    // span .card-title
     var cardTitle = $("<span>");
     cardTitle.addClass("card-title");
     cardTitle.attr("id", "recipetitle");
     cardTitle.text(response[i].title);
-    cardTitle.append("<br><br>");
+    cardTitle.append("<br>");
     cardTitle.append("Missing: " + response[i].missedIngredientCount);
     cardTitle.append("Uses: " + response[i].usedIngredientCount);
     
-    
-
+    //nesting elements 
     cardImage.append(image);
     card.append(cardTitle);
     card.append(cardImage);
-    
 
+    //append dynamic card into card-display 
     $("#card-display").append(card);
-    for (var key in response[i]){console.log(key + '->' + response[i][key]);}
+    //for (var key in response[i]){console.log(key + '->' + response[i][key]);}
   }
+
 })
+
 
 $(document).on('click', '.card', function(){
   var itemID = $(this).attr("id");
-  console.log("user clicked on item " + itemID);
+  //console.log("user clicked on item " + itemID);
 
   var queryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +itemID + "/information?includeNutrition=false"; 
-
-  console.log(queryURL);
+  //console.log(queryURL);
+  
+  //request to spoonacular using recipe ID 
   $.ajax({
     url: queryURL, 
     method: "GET", 
@@ -238,13 +321,14 @@ $(document).on('click', '.card', function(){
   }
 })
   .done(function(response) {
-    console.log(response.sourceUrl);
+    //console.log(response.sourceUrl);
     window.open(response.sourceUrl);
   })
 
 });
 
-}//end function sendRequest
+}
+//END SPOONACULAR FUNCTION CALL========================================================================
 		 
 		
 </script>

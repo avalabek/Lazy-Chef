@@ -15,6 +15,13 @@ body{
 	font-size:85px;
   font-family: 'Fredericka the Great', cursive;
   font-weight: 600;
+  margin-top: 0px;
+
+}
+
+#description{
+
+  font-weight: 400;
 
 }
 
@@ -36,7 +43,7 @@ body{
 .recipecard   {
 
   width:200px;
-  height:350px;
+  height:320px;
   text-align: center;
   margin:20px;
 }
@@ -55,11 +62,38 @@ body{
   margin-left:135px;
 }
 
+#form-display{
+  margin:0px;
+
+
+}
 #label{
   color:black;
   font-size: 30px;
   font-weight: 400;
+  text-align: center;
 
+}
+
+#tabletitle{
+  color:black;
+  font-size:25px;
+  font-weight: 400;
+  text-align: center;
+}
+
+#tablebody{
+  background: #ffffff
+
+}
+
+td{
+  padding:0px;
+  text-align: center;
+}
+
+#search{
+  margin-top: 5px;
 }
 
 #textarea1 {
@@ -67,13 +101,17 @@ body{
  background: #ffffff;
  margin-top: 20px;
  font-size: 20px;
+ padding:0;
+ height:20px;
+ line-height: 45px;
 
 
 
 }
 
-#ingredients {
-  
+.tablerow{
+display: inline-block;
+
 }
  
 
